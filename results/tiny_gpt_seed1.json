@@ -1,0 +1,138 @@
+{
+ "model": "tiny-GPT (examples/tiny_gpt.py)",
+ "results": [
+  {
+   "label": "FP16",
+   "spec": "fp16",
+   "nat": false,
+   "bits": 16.0,
+   "ppl": 7.3896353370973475
+  },
+  {
+   "label": "int per-token 4-bit",
+   "spec": "int4",
+   "nat": false,
+   "bits": 4.5,
+   "ppl": 7.40910996914541
+  },
+  {
+   "label": "KIVI-style 4-bit",
+   "spec": "kivi4",
+   "nat": false,
+   "bits": 4.375490196078432,
+   "ppl": 7.40566550341477
+  },
+  {
+   "label": "TurboQuant-prod 4-bit",
+   "spec": "qjl4/mse4",
+   "nat": false,
+   "bits": 4.4377450980392155,
+   "ppl": 7.502906909085773
+  },
+  {
+   "label": "TurboQuant-mse 4-bit",
+   "spec": "mse4/mse4",
+   "nat": false,
+   "bits": 4.3127450980392155,
+   "ppl": 7.42668919262921
+  },
+  {
+   "label": "TurboKV (ours) 4-bit",
+   "spec": "cal4/cal4",
+   "nat": false,
+   "bits": 4.3127450980392155,
+   "ppl": 7.4142806700745085
+  },
+  {
+   "label": "TurboKV + NAT (experimental) 4-bit",
+   "spec": "cal4/cal4",
+   "nat": true,
+   "bits": 4.3127450980392155,
+   "ppl": 7.416000490269718
+  },
+  {
+   "label": "int per-token 3-bit",
+   "spec": "int3",
+   "nat": false,
+   "bits": 3.5,
+   "ppl": 7.500543609421583
+  },
+  {
+   "label": "KIVI-style 3-bit",
+   "spec": "kivi3",
+   "nat": false,
+   "bits": 3.3754901960784314,
+   "ppl": 7.490291820860462
+  },
+  {
+   "label": "TurboQuant-prod 3-bit",
+   "spec": "qjl3/mse3",
+   "nat": false,
+   "bits": 3.437745098039216,
+   "ppl": 7.762804995969956
+  },
+  {
+   "label": "TurboQuant-mse 3-bit",
+   "spec": "mse3/mse3",
+   "nat": false,
+   "bits": 3.312745098039216,
+   "ppl": 7.539829394515114
+  },
+  {
+   "label": "TurboKV (ours) 3-bit",
+   "spec": "cal3/cal3",
+   "nat": false,
+   "bits": 3.312745098039216,
+   "ppl": 7.469322282749297
+  },
+  {
+   "label": "TurboKV + NAT (experimental) 3-bit",
+   "spec": "cal3/cal3",
+   "nat": true,
+   "bits": 3.312745098039216,
+   "ppl": 7.47481902301995
+  },
+  {
+   "label": "int per-token 2-bit",
+   "spec": "int2",
+   "nat": false,
+   "bits": 2.5,
+   "ppl": 7.997666943137419
+  },
+  {
+   "label": "KIVI-style 2-bit",
+   "spec": "kivi2",
+   "nat": false,
+   "bits": 2.3754901960784314,
+   "ppl": 7.978468120995529
+  },
+  {
+   "label": "TurboQuant-prod 2-bit",
+   "spec": "qjl2/mse2",
+   "nat": false,
+   "bits": 2.437745098039216,
+   "ppl": 8.427812548547848
+  },
+  {
+   "label": "TurboQuant-mse 2-bit",
+   "spec": "mse2/mse2",
+   "nat": false,
+   "bits": 2.312745098039216,
+   "ppl": 7.863741189576012
+  },
+  {
+   "label": "TurboKV (ours) 2-bit",
+   "spec": "cal2/cal2",
+   "nat": false,
+   "bits": 2.312745098039216,
+   "ppl": 7.651785632772243
+  },
+  {
+   "label": "TurboKV + NAT (experimental) 2-bit",
+   "spec": "cal2/cal2",
+   "nat": true,
+   "bits": 2.312745098039216,
+   "ppl": 7.691746099305044
+  }
+ ]
+}

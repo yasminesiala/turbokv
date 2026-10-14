@@ -1,0 +1,22 @@
+method                      bits  compress   out err   attn KL   top-1  logit slope
+-----------------------------------------------------------------------------------
+FP16                       16.00      1.0x    0.0007    0.0000  100.0%        1.000
+int4 per-token              4.25      3.8x    0.6665    0.2117   51.8%        1.000
+int3 per-token              3.25      4.9x    2.0475    1.3653   21.7%        1.002
+int2 per-token              2.25      7.1x    4.3613    6.9604    7.9%        1.013
+KIVI-style int4             4.25      3.8x    0.2009    0.0184   86.8%        1.000
+KIVI-style int3             3.25      4.9x    0.4273    0.0826   73.6%        1.002
+KIVI-style int2             2.25      7.1x    1.0121    0.4468   48.7%        1.013
+TurboQuant-prod K4V4        4.19      3.8x    0.5115    0.1707   55.1%        1.000
+TurboQuant-prod K3V3        3.19      5.0x    0.9115    0.5560   27.6%        0.998
+TurboQuant-prod K2V2        2.19      7.3x    1.5728    1.6249   14.8%        0.987
+TurboQuant-mse K4V4         4.13      3.9x    0.2259    0.0308   78.4%        0.991
+TurboQuant-mse K3V3         3.13      5.1x    0.4423    0.1116   63.3%        0.968
+TurboQuant-mse K2V2         2.13      7.5x    0.7400    0.3516   39.7%        0.890
+TurboKV K4V4 (ours)         4.13      3.9x    0.2187    0.0293   78.5%        1.000
+TurboKV K3V3 (ours)         3.13      5.1x    0.4528    0.1114   64.8%        1.000
+TurboKV K2V2 (ours)         2.13      7.5x    0.9259    0.4115   41.0%        0.999
+TurboKV+NAT K4V4            4.13      3.9x    0.2166    0.0289   78.5%        0.984
+TurboKV+NAT K3V3            3.13      5.1x    0.4271    0.1043   64.8%        0.942
+TurboKV+NAT K2V2            2.13      7.5x    0.7354    0.3362   41.0%        0.807
+saved /home/claude/turbokv/benchmarks/../figures/synthetic_attention.png
