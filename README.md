@@ -172,7 +172,7 @@ install `transformers` and run `python examples/eval_perplexity.py --hf gpt2 --t
 
 ```
 turbokv/
-  quantizer.py   TurboQuantMSE, TurboQuantProd (QJL), TurboQuantCal (this work)
+  quantizer.py   TurboQuantMSE, TurboQuantProd (QJL), TurboQuantCal (the calibrated quantizer)
   hadamard.py    fast Walsh-Hadamard transform, randomized rotation
   lloyd_max.py   optimal Gaussian codebooks via Lloyd's algorithm
   cache.py       TurboKVCache: streaming compressed cache + attention

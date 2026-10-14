@@ -25,7 +25,8 @@ FIG = os.path.join(ROOT, "figures")
 os.makedirs(FIG, exist_ok=True)
 
 INK, INK2, GRID, SURF = "#0b0b0b", "#52514e", "#e4e3df", "#fcfcfb"
-BLUE, ORANGE, AQUA, VIOLET, GRAY = "#2a78d6", "#eb6834", "#1baf7a", "#6250d6", "#9a9994"
+PINK, PURPLE, BLUE = "#d6336c", "#7048e8", "#3b8fe0"
+GRAY_DARK, GRAY_LIGHT = "#6b6a66", "#a8a7a2"
 
 plt.rcParams.update({
     "font.size": 10, "axes.edgecolor": INK2, "axes.labelcolor": INK2, "xtick.color": INK2,
@@ -47,30 +48,30 @@ def hero():
     runs = [json.load(open(os.path.join(ROOT, f"results/tiny_gpt_seed{s}.json")))["results"]
             for s in range(3)]
     base = runs[0][0]["ppl"]
-    series = [  # (label prefix in results, legend name, color, marker, emphasis)
-        ("int per-token", "int per-token", GRAY, "s", False),
-        ("KIVI-style", "KIVI-style", ORANGE, "^", False),
-        ("TurboQuant-mse", "TurboQuant (MSE)", AQUA, "v", False),
-        ("TurboQuant-prod", "TurboQuant (prod / QJL)", VIOLET, "D", False),
-        ("TurboKV (ours)", "TurboKV (ours)", BLUE, "o", True),
+    series = [  # (method label in results, legend name, color, marker, linestyle, emphasis)
+        ("int per-token", "int per-token", GRAY_LIGHT, "s", ":", False),
+        ("TurboQuant-mse", "TurboQuant (MSE)", GRAY_DARK, "v", "--", False),
+        ("KIVI-style", "KIVI-style", BLUE, "^", "-", False),
+        ("TurboQuant-prod", "TurboQuant (prod / QJL)", PURPLE, "D", "-", False),
+        ("TurboKV", "TurboKV", PINK, "o", "-", True),
     ]
     fig, ax = plt.subplots(figsize=(8, 4.8), dpi=170)
-    for prefix, name, c, mk, ours in series:
-        idx = [i for i, r in enumerate(runs[0]) if r["label"].startswith(prefix + " ")]
+    for method, name, c, mk, ls, hero_line in series:
+        idx = [i for i, r in enumerate(runs[0]) if r["label"].rsplit(" ", 1)[0] == method]
         bits = np.array([runs[0][i]["bits"] for i in idx])
         d = np.array([[run[i]["ppl"] - base for i in idx] for run in runs])
         mean, sd = d.mean(0), d.std(0)
         o = np.argsort(bits)
-        ax.errorbar(bits[o], mean[o], yerr=sd[o], color=c, marker=mk, ms=8 if ours else 6,
-                    lw=2.6 if ours else 1.6, capsize=3, zorder=5 if ours else 3,
+        ax.errorbar(bits[o], mean[o], yerr=sd[o], color=c, marker=mk, ms=8 if hero_line else 6,
+                    lw=2.8 if hero_line else 1.6, ls=ls, capsize=3, zorder=5 if hero_line else 3,
                     mec=SURF, mew=1.2, label=name)
-        if ours:  # the legend names the rest; one direct label avoids collisions
+        if hero_line:  # the legend names the rest; one direct label avoids collisions
             x, y = bits[o][0], mean[o][0]
             ax.annotate(f"{name}\n{16 / x:.1f}× smaller, about half the damage", (x, y),
                         xytext=(-10, 0), textcoords="offset points", ha="right", va="center",
                         fontsize=9, color=INK, fontweight="bold")
     ax.set_yscale("log")
-    ax.set_xlim(0.9, 4.7)
+    ax.set_xlim(1.3, 4.7)
     ax.set_xlabel("bits per cached number  (16 = uncompressed)")
     ax.set_ylabel("perplexity increase vs. FP16  (log, lower is better)")
     ax.set_title("Damage to a real trained GPT when its KV cache is compressed", pad=12)
@@ -94,15 +95,15 @@ def shrinkage(seeds=300, d=128):
     q[:20] += 0.25 * k
     true = (q @ k.T)[:, 0]
     fig, axes = plt.subplots(1, 2, figsize=(8.4, 3.9), dpi=170, sharey=True)
-    for ax, (cls, name, c) in zip(axes, [(TurboQuantMSE, "TurboQuant (MSE)", AQUA),
-                                         (TurboQuantCal, "TurboKV calibrated", BLUE)]):
+    for ax, (cls, name, c) in zip(axes, [(TurboQuantMSE, "TurboQuant (MSE)", BLUE),
+                                         (TurboQuantCal, "TurboKV (calibrated)", PINK)]):
         est = np.array([cls(d, 2, seed=s).inner_products(q, cls(d, 2, seed=s).quantize(k))[:, 0]
                         for s in range(seeds)]).mean(0)
         lim = np.abs(true).max() * 1.1
         ax.plot([-lim, lim], [-lim, lim], color=INK2, lw=1, ls="--", label="perfect (slope 1)")
         if cls is TurboQuantMSE:
             sl = 1 - gaussian_distortion(2)
-            ax.plot([-lim, lim], [-lim * sl, lim * sl], color=AQUA, lw=1.2,
+            ax.plot([-lim, lim], [-lim * sl, lim * sl], color=BLUE, lw=1.2,
                     label=f"theory: slope 1 − D₂ = {sl:.3f}")
         ax.scatter(true, est, s=26, color=c, edgecolor=SURF, lw=0.8, zorder=4,
                    label="average over 300 random rotations")
@@ -112,7 +113,7 @@ def shrinkage(seeds=300, d=128):
         _style(ax)
         ax.legend(frameon=False, fontsize=7.5, loc="upper left")
     axes[0].set_ylabel("average estimate")
-    fig.suptitle("Theorem 1: MSE quantization shrinks every dot product by exactly (1 − D_b)",
+    fig.suptitle("MSE quantization shrinks every dot product by exactly $1 - D_b$",
                  x=0.01, ha="left", fontweight="bold", color=INK, fontsize=10.5)
     fig.tight_layout()
     fig.savefig(os.path.join(FIG, "shrinkage.png"))
@@ -138,9 +139,9 @@ def variance(seeds=200, d=128):
     fig, ax = plt.subplots(figsize=(7.6, 4.2), dpi=170)
     x = np.arange(len(bits))
     w = 0.36
-    for off, key, name, c in ((-w / 2 - 0.01, "qjl", "TurboQuant prod (QJL)", VIOLET),
-                              (w / 2 + 0.01, "cal", "TurboKV calibrated (ours)", BLUE)):
-        ax.bar(x + off, meas[key], w, color=c, label=name + " — measured", zorder=3)
+    for off, key, name, c in ((-w / 2 - 0.01, "qjl", "TurboQuant prod (QJL)", PURPLE),
+                              (w / 2 + 0.01, "cal", "TurboKV (calibrated)", PINK)):
+        ax.bar(x + off, meas[key], w, color=c, label=name + ", measured", zorder=3)
         th = [variance_factor(key, b) for b in bits]
         ax.scatter(x + off, th, marker="_", s=500, color=INK, lw=1.6, zorder=4)
     ax.scatter([], [], marker="_", s=200, color=INK, label="closed-form theory")
@@ -151,7 +152,7 @@ def variance(seeds=200, d=128):
     ax.set_yscale("log")
     ax.set_xticks(x, [f"{b} bit{'s' if b > 1 else ''}" for b in bits])
     ax.set_ylabel("variance of ⟨q, k̂⟩   (units of ‖q‖²/d, log)")
-    ax.set_title("Theorem 2: same bits, both unbiased — calibration has far less noise", pad=10)
+    ax.set_title("Same bits, both unbiased: calibration has far less noise", pad=10)
     _style(ax)
     ax.grid(axis="x", visible=False)
     ax.legend(frameon=False, fontsize=8.5)

@@ -41,7 +41,7 @@ DEFAULT_METHODS = [
           ("KIVI-style", "kivi{b}", False),
           ("TurboQuant-prod", "qjl{b}/mse{b}", False),
           ("TurboQuant-mse", "mse{b}/mse{b}", False),
-          ("TurboKV (ours)", "cal{b}/cal{b}", False),
+          ("TurboKV", "cal{b}/cal{b}", False),
           ("TurboKV + NAT (experimental)", "cal{b}/cal{b}", True),
       ]],
 ]

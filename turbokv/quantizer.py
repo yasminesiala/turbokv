@@ -2,7 +2,7 @@
 
     TurboQuantMSE   values; minimizes ||x - x_hat||^2           (Zandieh et al. 2025)
     TurboQuantProd  keys; (b-1)-bit MSE + 1-bit QJL residual     (Zandieh et al. 2025)
-    TurboQuantCal   keys; b-bit MSE + one *calibrated* scale     (this repo)
+    TurboQuantCal   keys; b-bit MSE + one *calibrated* scale     (TurboKV)
 
 ----------------------------------------------------------------------------
 The new idea (TurboQuantCal): unbiased inner products for zero extra bits.
@@ -39,7 +39,7 @@ Gao & Long 2024; here it is paired with optimal multi-bit Lloyd-Max codes.)
 Variance comparison, unit vectors, d dims, in units of ||q||^2 / d:
                      1 bit     2 bits    3 bits    4 bits
   QJL (TurboQuant)   1.571     0.571     0.185     0.054     = (pi/2) D_{b-1}
-  calibrated (ours)  0.571     0.133     0.036     0.0096    = D_b / (1 - D_b)
+  calibrated         0.571     0.133     0.036     0.0096    = D_b / (1 - D_b)
   -> 2.8x to 5.7x lower variance at the same bit budget.
 The QJL bit buys unbiasedness at the cost of one bit of precision; the
 calibrated scale gets unbiasedness for free and keeps all b bits for the code.

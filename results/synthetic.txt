@@ -13,10 +13,9 @@ TurboQuant-prod K2V2        2.19      7.3x    1.5728    1.6249   14.8%        0.
 TurboQuant-mse K4V4         4.13      3.9x    0.2259    0.0308   78.4%        0.991
 TurboQuant-mse K3V3         3.13      5.1x    0.4423    0.1116   63.3%        0.968
 TurboQuant-mse K2V2         2.13      7.5x    0.7400    0.3516   39.7%        0.890
-TurboKV K4V4 (ours)         4.13      3.9x    0.2187    0.0293   78.5%        1.000
-TurboKV K3V3 (ours)         3.13      5.1x    0.4528    0.1114   64.8%        1.000
-TurboKV K2V2 (ours)         2.13      7.5x    0.9259    0.4115   41.0%        0.999
+TurboKV K4V4                4.13      3.9x    0.2187    0.0293   78.5%        1.000
+TurboKV K3V3                3.13      5.1x    0.4528    0.1114   64.8%        1.000
+TurboKV K2V2                2.13      7.5x    0.9259    0.4115   41.0%        0.999
 TurboKV+NAT K4V4            4.13      3.9x    0.2166    0.0289   78.5%        0.984
 TurboKV+NAT K3V3            3.13      5.1x    0.4271    0.1043   64.8%        0.942
 TurboKV+NAT K2V2            2.13      7.5x    0.7354    0.3362   41.0%        0.807
-saved /home/claude/turbokv/benchmarks/../figures/synthetic_attention.png

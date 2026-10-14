@@ -37,7 +37,7 @@
    "ppl": 7.4169316713319215
   },
   {
-   "label": "TurboKV (ours) 4-bit",
+   "label": "TurboKV 4-bit",
    "spec": "cal4/cal4",
    "nat": false,
    "bits": 4.3127450980392155,
@@ -79,7 +79,7 @@
    "ppl": 7.503903109338513
   },
   {
-   "label": "TurboKV (ours) 3-bit",
+   "label": "TurboKV 3-bit",
    "spec": "cal3/cal3",
    "nat": false,
    "bits": 3.312745098039216,
@@ -121,7 +121,7 @@
    "ppl": 7.9073717558550864
   },
   {
-   "label": "TurboKV (ours) 2-bit",
+   "label": "TurboKV 2-bit",
    "spec": "cal2/cal2",
    "nat": false,
    "bits": 2.312745098039216,

@@ -27,7 +27,7 @@ METHODS = [
     *[(f"KIVI-style int{b}", f"kivi{b}", False, "kivi") for b in (4, 3, 2)],
     *[(f"TurboQuant-prod K{b}V{b}", f"qjl{b}/mse{b}", False, "qjl") for b in (4, 3, 2)],
     *[(f"TurboQuant-mse K{b}V{b}", f"mse{b}/mse{b}", False, "mse") for b in (4, 3, 2)],
-    *[(f"TurboKV K{b}V{b} (ours)", f"cal{b}/cal{b}", False, "cal") for b in (4, 3, 2)],
+    *[(f"TurboKV K{b}V{b}", f"cal{b}/cal{b}", False, "cal") for b in (4, 3, 2)],
     *[(f"TurboKV+NAT K{b}V{b}", f"cal{b}/cal{b}", True, "calna") for b in (4, 3, 2)],
 ]
 
@@ -93,12 +93,13 @@ def print_table(rows):
 
 
 STYLE = {
-    "int": ("#9a9994", "s", "int-b per-token"),
-    "kivi": ("#eb6834", "^", "KIVI-style (per-channel keys)"),
-    "qjl": ("#6250d6", "D", "TurboQuant-prod (QJL keys)"),
-    "mse": ("#1baf7a", "v", "TurboQuant-mse"),
-    "cal": ("#2a78d6", "o", "TurboKV: calibrated K+V (ours)"),
-    "calna": ("#52514e", "*", "TurboKV + NAT (experimental)"),
+    # (color, marker, linestyle, label)
+    "int": ("#a8a7a2", "s", ":", "int-b per-token"),
+    "mse": ("#6b6a66", "v", "--", "TurboQuant-mse"),
+    "kivi": ("#3b8fe0", "^", "-", "KIVI-style (per-channel keys)"),
+    "qjl": ("#7048e8", "D", "-", "TurboQuant-prod (QJL keys)"),
+    "cal": ("#d6336c", "o", "-", "TurboKV"),
+    "calna": ("#d6336c", "*", "--", "TurboKV + NAT (experimental)"),
 }
 
 
@@ -108,19 +109,24 @@ def plot(rows, path, metric="kl", ylabel="attention KL divergence (log)"):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    fig, ax = plt.subplots(figsize=(7.8, 4.8), dpi=160)
-    for fam, (c, mk, label) in STYLE.items():
+    plt.rcParams.update({"font.size": 10, "axes.edgecolor": "#52514e", "axes.labelcolor": "#52514e",
+                         "xtick.color": "#52514e", "ytick.color": "#52514e", "figure.facecolor": "#fcfcfb",
+                         "axes.facecolor": "#fcfcfb", "savefig.facecolor": "#fcfcfb"})
+    fig, ax = plt.subplots(figsize=(8, 4.8), dpi=170)
+    for fam, (c, mk, ls, label) in STYLE.items():
         pts = sorted((r["bits"], r[metric]) for r in rows if r["family"] == fam)
         if pts:
             xs, ys = zip(*pts)
-            ours = fam in ("cal", "calna")
-            ax.plot(xs, ys, marker=mk, color=c, label=label, lw=2.2 if ours else 1.2,
-                    ms=9 if mk == "*" else 6, alpha=1 if ours else 0.85)
+            main = fam == "cal"
+            ax.plot(xs, ys, marker=mk, color=c, label=label, lw=2.6 if main else 1.4, ls=ls,
+                    ms=9 if mk == "*" else 6, mec="#fcfcfb", mew=1, zorder=5 if main else 3)
     ax.set_yscale("log")
     ax.set_xlabel("bits per cached number (including scales / norms)")
     ax.set_ylabel(ylabel)
-    ax.set_title("KV-cache compression: error vs. memory  (lower-left is better)")
-    ax.grid(alpha=0.3, which="both")
+    ax.set_title("Synthetic outlier-heavy attention: error vs. memory (lower-left is better)",
+                 loc="left", fontweight="bold", color="#0b0b0b", pad=12)
+    ax.grid(color="#e4e3df", lw=0.8, which="major")
+    ax.set_axisbelow(True)
     ax.spines[["top", "right"]].set_visible(False)
     ax.legend(frameon=False, fontsize=8.5)
     fig.tight_layout()
